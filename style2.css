@@ -1,0 +1,127 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    outline: none;
+}
+
+body{
+    width: 100vw;
+}
+.storiya{
+    display: flex; 
+    overflow-x: scroll;
+    height: 100vh;
+    width: 100%;
+    padding: 100px 100px;
+    gap:100px;
+    background: #3e3e3e;
+ }
+
+ .storiya::-webkit-scrollbar{
+    display: none;
+ }
+
+ .kahani{
+    height:200px;
+    width: 600px; 
+    position: relative;
+ }
+
+ .kahani img {
+    width: 200px;
+ }
+
+ .kahani video{
+    width: 200px;
+    height: 200px;
+ }
+
+ 
+ .active img,.active video{
+    width: 400px;
+    height: 250%;
+ }
+
+.storiya p{
+    color: white;
+    margin-bottom: 15px;
+}
+
+.layer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap:20px;
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height: 120%;
+    background: black;
+    transition: height 0.5s;
+}
+.active .layer{
+    display: none;
+}
+
+.after .layer{
+    background: linear-gradient(rgba(0,0,0,0.5),#3e3e3e);
+}
+
+.before .layer{
+    background: linear-gradient(rgba(0,0,0,0.5),#3e3e3e);
+}
+
+
+.prev1{
+    position: absolute;
+    top:380px;
+    left:325px;
+    border-radius: 100%;
+    padding: 10px 10px;
+    background-color: white;
+}
+
+.next1{
+    position: absolute;
+    top:380px;
+    right:655px;
+    border-radius: 100%;
+    padding: 10px 10px;
+    background-color: white;
+}
+
+.layer img{
+    width: 40px;
+    border: 1px solid white;
+    border-radius: 100%;
+}
+
+.layer p{
+    color: white;
+}
+
+
+.storiya input{
+    background: linear-gradient(rgba(0,0,0,0.5),#3e3e3e); 
+    color:white;
+    border-radius: 10px;
+    width: 0;
+    overflow: hidden;
+}
+
+.storiya input{
+    display: none;
+}
+
+.storiya input ::placeholder{
+    color:white;
+}
+.active input{
+    display: block;
+    width: 100%;
+    padding: 10px 10px ;
+    
+}

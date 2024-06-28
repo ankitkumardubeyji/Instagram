@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>stories - Paget</title>
+    <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+    
+    <div class="prev1">
+        <img src="https://tse4.mm.bing.net/th?id=OIP.hkucBwyTCkwiCAWU9IL6mAAAAA&pid=Api&P=0"style="width: 20px;">
+    </div>
+    <div class="storiya">
+        
+
+        <div class="kahani kahani1 before" id="0"` style="width:600px;">
+            <p>Mr Dubeyji</p>
+            <img src="assets/dubey2.png" alt="">
+            <input type="text" placeholder="Type Your Message">
+        <div class="layer">
+            <img src="assets/dubey2.png" alt="">
+            <p>Mr Dubeyji</p>
+        </div>
+        </div>
+
+        <div class="kahani kahani2 active" id="1">
+            <p>Anshu Pathak</p>
+            <video id="myVideo" src="assets/WhatsApp Video 2023-07-07 at 08.57.33.mp4" controls></video>
+            <input type="text" placeholder="Type Your Message">
+        <div class="layer">
+            
+            <p>Anshu Pathak</p>
+         </div>
+        </div>
+        <div class="kahani kahani3  after" id="2">
+            <p>Neha Tiwary</p>
+            <img src="assets/neha.png" alt="">
+            <input type="text" placeholder="Type Your Message">
+        <div class="layer">
+            <img src="assets/neha.png" alt="">
+            <p>Neha Pathak</p>
+        </div>
+
+        </div>
+        <div class="kahani kahani4 " id="3">
+            <p>Nilesh Dubey</p>
+            <img src="assets/nilesh.png" alt="">
+            <input type="text" placeholder="Type Your Message">
+        <div class="layer">
+            <img src="assets/nilesh.png" alt="">
+            <p>Nilesh Dubey</p>
+        </div>
+
+        </div>
+        <div class="kahani kahani5" id="4">
+            <p>Vijay Dubey</p>
+            <img src="assets/vijay.png" alt="">
+            <input type="text" placeholder="Type Your Message">
+            
+        <div class="layer">
+            <img src="assets/vijay.png" alt="">
+            <p>Vijay Dubey</p>
+        </div>
+        </div>
+
+        <div class="kahani kahani6 " id="5">
+            <p>Ragini dubey</p>
+            <img src="assets/dolly.png" alt="">
+            <input type="text" placeholder="Type Your Message">
+        <div class="layer">
+            <img src="assets/dolly.png" alt="">
+            <p>Ragini Dubey</p>
+        </div>
+        </div>
+        <div class="kahani kahani7 " id="6">
+            <p>Ayush Dubey</p>
+            <img src="assets/golu.png" alt="">
+            <input type="text" placeholder="Type Your Message">
+            <div class="layer">
+                <img src="assets/golu.png" alt="">
+                <p>Ayush Dubey</p>
+            </div>
+        </div>
+        <div class="kahani kahani8 " id="7"><img src="assets/bulbulpng.png" alt="">
+        <div class="layer">
+            <img src="assets/bulbulpng.png" alt="">
+            <input type="text" placeholder="Type Your Message">
+            <p>Aisha Dubey</p>
+        </div>
+        </div>
+
+        
+    </div>
+    <div class="next1">
+        <img src="https://tse2.mm.bing.net/th?id=OIP.K9tPVcU7Rc8yxRgfK25L2gHaHa&pid=Api&P=0"style="width: 20px;">
+         </div>
+
+    <script>
+        let scrollcontainer1 = document.querySelector(".storiya");
+        let backbtn1 = document.querySelector(".prev1");
+        let nextbtn1 = document.querySelector(".next1");
+    
+        scrollcontainer1.addEventListener("wheel",(evt)=>{
+          evt.preventDefault();
+          scrollcontainer1.scrollLeft +=evt.delayY;
+          scrollcontainer1.style.scrollbehaviour = "auto";
+        })
+    
+        nextbtn1.addEventListener("click",()=>{
+            scrollcontainer1.style.scrollbehaviour="smooth";
+            scrollcontainer1.scrollLeft +=400;
+        })
+    
+        backbtn1.addEventListener("click",()=>{
+            scrollcontainer1.scrollLeft -=400;
+            scrollcontainer1.style.scrollbehaviour="smooth";
+        })
+        
+    
+    </script>
+
+<!--- Apolying javascript on the prev1-->
+    <script>
+        document.querySelector('.prev1').addEventListener('click',()=>{
+        let currentactive = document.querySelector(".active");
+        let currindex =parseInt(currentactive.id);
+
+        // making new after : jo phle active tha ab wo after ho gya 
+        if(currindex!=0){
+        currentactive.classList.remove('active');
+        currentactive.classList.add('after');
+  
+        // removing the purana after : 
+        if(currindex+1<=7){
+        document.getElementById(String(currindex+1)).classList.remove('after');
+        }
+         // removing the purana before
+         if(currindex-1>=0){
+         document.getElementById(String(currindex-1)).classList.remove('before');
+         }
+
+         // adding active to the new currindex
+         if(currindex>=1){
+            currindex=currindex-1;
+         }
+         document.getElementById(String(currindex)).classList.add('active');
+         
+
+    
+         
+         // making new before
+         if(currindex-1>=0){
+            document.getElementById(String(currindex-1)).classList.add('before');
+        }
+
+    }
+
+        })
+    </script>
+
+
+<!--- Applying javascript on the next1--->
+   <script>
+     document.querySelector('.next1').addEventListener('click',()=>{
+        let currentactive = document.querySelector(".active");
+        let currindex =parseInt(currentactive.id);
+
+        // making new after : jo phle active tha ab wo before ho jyega 
+        if(currindex!=7){
+        currentactive.classList.remove('active');
+        currentactive.classList.add('before');
+        console.log(currentactive.classList);
+        // removing the purana after : 
+        if(currindex+1<=7){
+        document.getElementById(String(currindex+1)).classList.remove('after');
+        }
+         // removing the purana before
+         if(currindex-1>=0){
+         document.getElementById(String(currindex-1)).classList.remove('before');
+         }
+
+         // adding active to the new currindex
+         if(currindex<=6){
+            currindex=currindex+1;
+         }
+         document.getElementById(String(currindex)).classList.add('active');
+    
+         
+         // making new after
+         if(currindex+1<=7){
+            document.getElementById(String(currindex+1)).classList.add('after');
+        }
+
+    }
+
+        })
+   </script>
+
+
+<script>
+    setInterval(change,32000);
+    function change(){
+        let scrollcontainer2 = document.querySelector(".storiya");
+        scrollcontainer2.style.scrollbehaviour="smooth";
+     scrollcontainer2.scrollLeft +=400;
+     let currentactive = document.querySelector(".active");
+        let currindex =parseInt(currentactive.id);
+
+        // making new after : jo phle active tha ab wo before ho jyega 
+        if(currindex!=7){
+        currentactive.classList.remove('active');
+        currentactive.classList.add('before');
+        console.log(currentactive.classList);
+        // removing the purana after : 
+        if(currindex+1<=7){
+        document.getElementById(String(currindex+1)).classList.remove('after');
+        }
+         // removing the purana before
+         if(currindex-1>=0){
+         document.getElementById(String(currindex-1)).classList.remove('before');
+         }
+
+         // adding active to the new currindex
+         if(currindex<=6){
+            currindex=currindex+1;
+         }
+         document.getElementById(String(currindex)).classList.add('active');
+    
+         
+         // making new after
+         if(currindex+1<=7){
+            document.getElementById(String(currindex+1)).classList.add('after');
+        }
+
+    }
+    }
+</script>
+
+<script>
+    function chal(){
+    let current = document.getElementById('1');
+    if(current.classList=='active'){
+        document.getElementById("myVideo")[0].controls = true;
+        console.log(document.getElementById("myVideo"));
+        
+    }
+}
+
+</script>
+
+</body>
+</html>
