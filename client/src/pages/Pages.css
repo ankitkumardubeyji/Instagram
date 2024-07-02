@@ -1,0 +1,310 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+.left{
+    flex-basis:25%;
+    position:fixed;
+    border-right:1px solid white;
+    top:0;
+    left:0;
+}
+.middle{
+    margin: auto;
+}
+
+.container{
+    padding: 5px;
+}
+
+.subtitles{
+   
+    display: flex;
+    flex-direction: column;
+   
+}
+
+.subtitles img{
+    
+    width:30px;
+    margin-right: 5px;
+    align-items: center;
+}
+
+.subtitles a{
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+
+
+.logo{
+    width: 100px;
+    margin-bottom: 10px;
+}
+
+.subtitles a{
+    text-decoration: none;
+    color: black;
+}
+
+.profile{
+    border-radius: 50%;
+}
+
+.end a{
+    margin-top:200px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+}
+
+.subtitles a i{
+    margin-right:15px;
+    margin-left: 10px;
+    font-size: 25px;
+}
+
+.subtitles a img,.end a img{
+    margin-right: 11px;
+    margin-left: 8px;
+}
+
+.all{
+    display: flex;
+}
+
+.stories{
+    display: flex;
+    align-items: center;
+    gap:30px;
+   overflow-x: scroll;
+    
+}
+
+.stories::-webkit-scrollbar{
+    display: none;
+}
+
+.middle{
+    overflow-x:scroll;
+    flex-basis:50%;
+}
+
+.next-btn{
+    position: absolute;
+    top:50px;
+    right:475px;
+    border-radius: 100%;
+    padding: 10px 10px;
+    background-color: white;
+}
+
+.prev-btn{
+    position: absolute;
+    top:50px;
+    left:275px;
+    border-radius: 100%;
+    padding: 10px 10px;
+    background-color: white;
+}
+.middle::-webkit-scrollbar{
+    display: none;
+}
+
+.post-container{
+    margin-left:130px;
+    margin-top:50px;
+}
+
+.post{
+   display: flex; 
+   width: 390px;
+   overflow-x: scroll;
+   height: 400px;
+
+}
+
+.post1 img{
+    width: 100%;
+    height: 100%;
+}
+
+.post1::-webkit-scrollbar{
+    display: none;
+}
+
+.prev{
+    position: absolute;
+    top:380px;
+    left:325px;
+    border-radius: 100%;
+    padding: 10px 10px;
+    background-color: white;
+}
+
+.next{
+    position: absolute;
+    top:380px;
+    right:655px;
+    border-radius: 100%;
+    padding: 10px 10px;
+    background-color: white;
+}
+
+.title{
+    display: flex;
+    align-items: center;
+    gap:10px;
+    margin-bottom: 5px;
+}
+
+.name{
+ font-size: 14px;
+ font-weight: bold;   
+}
+
+.time{
+    font-size: 12px;
+    color:grey;
+}
+
+.title p{
+    font-size: 12px;
+}
+
+.title img{
+    width: 40px;
+    border-radius: 100%;
+}
+
+.nonactive{
+    display: none;
+}
+
+.icons{
+    display: flex;
+    gap:10px;
+    margin-top: 10px;
+}
+
+.icons img{
+    margin-right:290px ;
+    
+    width: 20px;
+}
+
+.bottom span{
+    color: grey;
+}
+
+.span i{
+    margin-left: 100px;
+}
+
+.bottom{
+    display: flex;
+    flex-direction: column;
+    gap:5px;
+}
+
+.post-container{
+    display: flex;
+    flex-direction: column;
+    gap:20px;
+}
+
+.right{
+    padding: 50px 50px;
+    flex-basis: 25%;
+}
+
+.title a{
+    text-decoration: none;
+    color: blue;
+}
+
+.middle{
+    margin-left: 300px;
+}
+
+.storiya{
+    display: flex;
+    gap:20px;
+    margin-left: 1000px;
+    overflow-x: scroll;
+    height: 100vh;
+    width: 70vw;
+    margin-top: 300px;
+    
+}
+
+.kahani{
+    height: 60vw;
+    width: 600px;
+    border: 4px solid red;
+}
+
+.kahani img{
+    width: 100%;
+}
+
+
+
+
+
+.storiya::-webkit-scrollbar{
+    display: none;
+}
+
+
+.active{
+    height: 100%;
+}
+
+
+.layer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap:20px;
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height: 0%;
+    background: linear-gradient(rgba(0,0,0,0.5),#3e3e3e);
+    transition: height 0.5s;
+}
+
+.before.layer,.after.layer{
+    height: 100%;;
+}
+
+
+.prev1{
+    position: absolute;
+    top:380px;
+    left:325px;
+    border-radius: 100%;
+    padding: 10px 10px;
+    background-color: white;
+}
+
+.next1{
+    position: absolute;
+    top:380px;
+    right:655px;
+    border-radius: 100%;
+    padding: 10px 10px;
+    background-color: white;
+}
+
+.layer img{
+    width: 20px;
+}
+
