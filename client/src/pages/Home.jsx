@@ -1,6 +1,10 @@
 import "./Pages.css";
 
 function Home() {
+  
+
+
+
   return (
     <div className="all">
       <div className="left">
