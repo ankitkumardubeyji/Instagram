@@ -13,9 +13,11 @@ app.use(express.static("public"))
 
 
 import userRouter  from "./routes/user.route.js"
-
+import chatRouter from "./routes/chat.route.js"
 
 app.use("/api/v1/users",userRouter);
+app.use("/api/v1/chats",chatRouter);
+
 
 export default app;
 

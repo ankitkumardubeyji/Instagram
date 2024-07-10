@@ -2,6 +2,8 @@
 
 import {v2 as cloudinary} from "cloudinary"
 import fs from "fs"
+import { getBase64 } from "../lib/helper.js";
+import { v4 as uuid } from "uuid";
 
 // configuring the cloudinary
 cloudinary.config({
@@ -11,28 +13,36 @@ cloudinary.config({
 })
 
 
-export const uploadOnCloudinary = async(localFilePath)=>{
-    try{
-        // checking if the file exists in the localstorage
-        if(!localFilePath){
-            return null;
-        }
-
-        // upload the file on cloudinary
-        const response = await cloudinary.uploader.upload(localFilePath,{
-            resource_type:"auto"
-        })
-
-        
-
-        fs.unlinkSync(localFilePath) // removed the temporary saved local file 
-
-        return response; // file gets uploaded and returned the url as the response
-    }
-    catch(err){
-        fs.unlinkSync(localFilePath)
+export const uploadOnCloudinary = async(files = [])=>{
+    const uploadPromises =  files.map((file) => {
+        return new Promise((resolve, reject) => {
+          cloudinary.uploader.upload(
+            getBase64(file),
+            {
+              resource_type: "auto",
+              public_id: uuid(),
+            },
+            (error, result) => {
+              if (error) return reject(error);
+              resolve(result);
+            }
+          );
+        });
+      });
+    
+      try {
+        console.log("came here");
+        const results = await Promise.all(uploadPromises);
+        console.log("okk")
+        const formattedResults = results.map((result) => ({
+          public_id: result.public_id,
+          secure_url: result.secure_url,
+        }));
+        return formattedResults;
+      } catch (err) {
         console.log(err)
-    }
+        throw new Error("Error uploading files to cloudinary", err);
+      }
 }
 
 // for deleting the file from cloudinary we need the public id 
@@ -49,6 +59,7 @@ export function getPublicIdFromUrl(cloudinaryUrl){
 
 // function for deleting the file from cloudinary
 export const deleteFromCloudinary = async(publicId)=>{
+    console.log(publicId)
     try{
         if(!publicId){
             return null;
@@ -60,6 +71,7 @@ export const deleteFromCloudinary = async(publicId)=>{
     }
 
     catch(err){
+        console.log(err)
         console.error("error deleting file from cloudinary");
         throw err;
     }

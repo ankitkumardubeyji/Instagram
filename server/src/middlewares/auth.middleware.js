@@ -1,7 +1,7 @@
-import { confirmPasswordReset } from "firebase/auth";
-import User from "../models/user.models.js";
+
+import User from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
-import { asyncHandler } from "../utils/asyncHandler.js";
+import { asyncHandler } from "../utils/AsynHandler.js";
 import jwt from "jsonwebtoken"
 
 export const verifyJWT = asyncHandler(async(req,res,next)=>{
@@ -13,10 +13,10 @@ export const verifyJWT = asyncHandler(async(req,res,next)=>{
         }
 
         // if the token is valid then jwt will verify and return the data stored in the token
-        const decodedToken = jwt.verify(token,process.env.JWT_SECRET)
-       
+        const decodedToken = await jwt.verify(token,process.env.JWT_SECRET)
+       console.log(decodedToken)
 
-        const user = await User.findById(decodedToken?._id)
+        const user = await User.findById(decodedToken?.id)
 
         if(!user){
             throw new ApiError(400,"invalid access Token")

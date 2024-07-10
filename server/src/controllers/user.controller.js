@@ -102,5 +102,31 @@ const loginUser = asyncHandler(async(req,res)=>{
 
 })
 
-export {registerUser,loginUser};
+
+const searchUser = asyncHandler(async(req,res)=>{
+    const {fullName} = req.query
+
+
+
+    
+
+
+})
+
+const logOut = asyncHandler(async(req,res,next)=>{
+    console.log("came to the backend for the logout")
+    // finding the user logged in , and unsetting its refreshToken
+   
+
+    const options = {
+        httpOnly:true,
+        secure:true, 
+    }
+    console.log("here");
+    return res.status(200)
+    .clearCookie("accessToken",options)
+    .json(new ApiResponse(200,{},"User logged out successfully "))
+})
+
+export {registerUser,loginUser,logOut};
 
