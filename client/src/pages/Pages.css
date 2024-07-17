@@ -1,0 +1,154 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.chatting {
+    display: flex;
+    height: 100vh;
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    width: 80px;
+    padding: 20px 0;
+    border-right: 1px solid #ddd;
+}
+
+.left .icon {
+    margin: 20px 0;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.middle {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    overflow-y: auto;
+}
+
+.middle input{
+    border:none;
+    outline: none;
+    color:black;
+}
+
+.middle .searchBox{
+    display: flex;
+    justify-content: space-between;
+    border:1px solid black;
+    gap:20px;
+    padding:10px;
+}
+
+
+
+.profile-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-info h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.profile-info button {
+    background: none;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.message-list {
+    flex: 1;
+}
+
+.message {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.user-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.message-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.message-info h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.message-info p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.time {
+    color: #999;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+.right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.message-placeholder {
+    text-align: center;
+}
+
+.message-placeholder h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.message-placeholder p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.message-placeholder button {
+    background-color: #0095f6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}

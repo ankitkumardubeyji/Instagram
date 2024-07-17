@@ -1,0 +1,94 @@
+.user-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .profile-header {
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .avatar {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    margin-right: 20px;
+  }
+  
+  .profile-info {
+    flex: 1;
+  }
+  
+  .profile-top {
+    display: flex;
+    align-items: center;
+  }
+  
+  .username {
+    margin-right: 10px;
+  }
+  
+  .follow-button,
+  .message-button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #3897f0;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .profile-stats {
+    display: flex;
+    margin-top: 10px;
+  }
+  
+  .profile-stats span {
+    margin-right: 20px;
+  }
+  
+  .profile-details {
+    margin-top: 10px;
+  }
+  
+  .email {
+    display: block;
+    margin-top: 5px;
+  }
+  
+  .spotify-link {
+    display: flex;
+    align-items: center;
+    color: #1db954;
+    margin-top: 5px;
+  }
+  
+  .profile-followed-by {
+    margin-top: 10px;
+    color: grey;
+  }
+  
+  .profile-highlights {
+    margin-top: 20px;
+  }
+  
+  .highlight {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .highlight-image {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+  }
+  
+  .highlight-title {
+    margin-top: 5px;
+    font-weight: bold;
+  }
+  

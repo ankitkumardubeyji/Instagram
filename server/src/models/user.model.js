@@ -46,6 +46,10 @@ const userSchema = mongoose.Schema({
         select:false, // will not give password of the user unless explicitly asked
     },
 
+    bio:{
+        type:String,
+    },
+
     avatar:{
         public_id:{
             type:String,
@@ -62,6 +66,8 @@ const userSchema = mongoose.Schema({
     }
 
 },{timestamps:true})
+
+userSchema.index({fullName:"text",userName:"text"})
 
 // middleware for hashing whenever password is modified before saving to the database
 

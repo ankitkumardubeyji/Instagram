@@ -12,6 +12,28 @@ cloudinary.config({
     api_secret:process.env.CLOUDINARY_API_SECRET 
 })
 
+// this is for uploading on cloudinary when single files are selected 
+export const uploadOnCloudinarySingle = async(localFilePath)=>{
+    try{
+        if(!localFilePath){
+            return null;
+        }
+
+        // upload the file on cloudinary
+
+        const response = await cloudinary.uploader.upload(localFilePath,{
+            resource_type:"auto"
+        })
+
+       // console.log("file has been successfully uploaded on the cloudinary "+response.url)
+        fs.unlinkSync(localFilePath) // deleting the file from the local storage 
+        return response
+    }
+    catch(error){
+        fs.unlinkSync(localFilePath)
+    }
+}
+
 
 export const uploadOnCloudinary = async(files = [])=>{
     const uploadPromises =  files.map((file) => {
