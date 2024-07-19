@@ -35,57 +35,45 @@ const newGroupChat = asyncHandler(async(req,res)=>{
 })
 
 const getMyChats = asyncHandler(async (req, res, next) => {
-    const chats = await Chat.find({ members: req.user }).populate(
+  const chats = await Chat.find({ members: req.user }).populate(
       "members",
       "name avatar"
-    );
-  
-    const transformedChats = chats.map(({ _id, name, members, groupChat }) => {
-      const otherMember = getOtherMember(members, req.user);
-  
+  );
+
+  const transformedChats = await Promise.all(chats.map(async ({ _id, name, members, groupChat }) => {
+      
+    const otherId = members.filter((item)=> item._id.toString()!=req.user._id)[0]._id
+    console.log("ideas of the fellows are ")
+    console.log(members)
+    console.log("-----------------------------------------") 
+    console.log(req.user._id+" is the login wala id")
+    console.log(otherId+" is the member id ")
+    console.log("----------------------------------") 
+    const otherMember = await User.findById(otherId)
+    console.log(otherMember)     
+
       return {
-        _id,
-        groupChat,
-        avatar: groupChat
-          ? members.slice(0, 3).map(({ avatar }) => avatar.secure_url)
-          : [otherMember.avatar.secure_url],
-        name: groupChat ? name : otherMember.name,
-        members: members.reduce((prev, curr) => {
-          if (curr._id.toString() !== req.user.toString()) {
-            prev.push(curr._id);
-          }
-          return prev;
-        }, []),
+          _id,
+          groupChat,
+          avatar: groupChat
+              ? members.slice(0, 3).map(({ avatar }) => avatar.secure_url)
+              : [otherMember.avatar.secure_url],
+          name: groupChat ? name : otherMember.fullName,
+          members: members.reduce((prev, curr) => {
+              if (curr._id.toString() !== req.user.toString()) {
+                  prev.push(curr._id);
+              }
+              return prev;
+          }, []),
       };
-    });
-  
-    return res.status(200).json({
+  }));
+
+  return res.status(200).json({
       success: true,
       chats: transformedChats,
-    });
   });
+});
 
-
-  
-const getMyGroups = asyncHandler(async (req, res, next) => {
-    const chats = await Chat.find({
-      members: req.user,
-      groupChat: true,
-      creator: req.user,
-    }).populate("members", "name avatar");
-  
-    const groups = chats.map(({ members, _id, groupChat, name }) => ({
-      _id,
-      groupChat,
-      name,
-      avatar: members.slice(0, 3).map(({ avatar }) => avatar.url),
-    }));
-  
-    return res.status(200).json({
-      success: true,
-      groups,
-    });
-  });
 
   const addMembers = asyncHandler(async (req, res, next) => {
     const { chatId, members } = req.body;
@@ -219,12 +207,13 @@ const getMyGroups = asyncHandler(async (req, res, next) => {
   
 
   const sendAttachments = asyncHandler(async (req, res, next) => {
+    console.log("--------------------------------------------------------")
+    console.log(req.body)
     const { chatId } = req.body;
   
     const files = req.files || [];
   
-    if (files.length < 1)
-      return next(new ApiError(400,"Please Upload Attachments"));
+    
   
     if (files.length > 5)
       return next(new ApiError(400, "Files Can't be more than 5"));
@@ -236,14 +225,14 @@ const getMyGroups = asyncHandler(async (req, res, next) => {
   
     if (!chat) return next(new ApiError(404,"Chat not found"));
   
-    if (files.length < 1)
-      return next(new ApiError(400,"Please provide attachments"));
+    if (files.length > 5 )
+      return next(new ApiError(400,"Please provide attachments less than 5"));
   
     //   Upload files here
     const attachments = await uploadOnCloudinary(files);
   
     const messageForDB = {
-      content: "",
+      content: req.body.content,
       attachments,
       sender: me._id,
       chat: chatId,
@@ -275,18 +264,33 @@ const getMyGroups = asyncHandler(async (req, res, next) => {
 
   const getChatDetails = asyncHandler(async (req, res, next) => {
     if (req.query.populate === "true") {
-      const chat = await Chat.findById(req.params.id)
-        .populate("members", "fullName avatar")
+      let chat = await Chat.findById(req.params.id)
+        .populate("members", "fullName avatar userName")
         .lean();
   
       if (!chat) return next(new ApiError(404,"Chat not found"));
   
      // console.log(chat)
-      chat.members = chat.members.map(({ _id, fullName, avatar }) => ({
+      chat.members = chat.members.map(({ _id, fullName, avatar, userName }) => ({
         _id,
         fullName,
+        userName,
         avatar: avatar.secure_url,
       }));
+
+      console.log("came here ")
+      //console.log(members[1].avatar)
+
+      let index = 0;
+      for(let i = 0;i<chat.members.length;i++){
+        if(chat.members[i]._id.toString()!=req.user._id.toString()){
+          index = i;
+        }
+      }
+
+      chat = {...chat, dp:chat.members[index].avatar, userName:chat.members[index].userName}
+      chat.name = chat.members[index].fullName
+
   
       return res.status(200).json({
         success: true,
@@ -294,6 +298,11 @@ const getMyGroups = asyncHandler(async (req, res, next) => {
       });
     } else {
       const chat = await Chat.findById(req.params.id);
+      console.log("came here ")
+      console.log(members[1].avatar)
+
+      chat = {...chat, dp:members[1].avatar}
+
       if (!chat) return next(new ApiError(404,"Chat not found"));
   
       return res.status(200).json({
@@ -390,9 +399,9 @@ const getMyGroups = asyncHandler(async (req, res, next) => {
   
     if (!chat) return next(new ApiError(400,"Chat not found"));
   
-    if (!chat.members.includes(req.user.toString()))
+    if (!chat.members.includes(req.user._id.toString()))
       return next(
-        new ErrorHandler("You are not allowed to access this chat", 403)
+        new ApiError(400,"You are not allowed to access this chat")
       );
   
     const [messages, totalMessagesCount] = await Promise.all([
@@ -400,7 +409,7 @@ const getMyGroups = asyncHandler(async (req, res, next) => {
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(resultPerPage)
-        .populate("sender", "name")
+        .populate("sender", "fullName userName avatar")
         .lean(),
       Message.countDocuments({ chat: chatId }),
     ]);

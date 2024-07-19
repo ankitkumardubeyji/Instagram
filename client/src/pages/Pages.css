@@ -80,9 +80,7 @@ body {
     font-size: 14px;
 }
 
-.message-list {
-    flex: 1;
-}
+
 
 .message {
     display: flex;
@@ -101,6 +99,8 @@ body {
 .message-info {
     display: flex;
     flex-direction: column;
+    width: fit-content;
+    height: fit-content;
 }
 
 .message-info h3 {
@@ -152,3 +152,130 @@ body {
     cursor: pointer;
     border-radius: 4px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+.chat-interface {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    background-color: #f8f8f8;
+    font-family: Arial, sans-serif;
+  }
+  
+  .chat-header, .chat-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-avatar, .profile-avatar, .message-image {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+  }
+  
+  .user-name {
+    font-size: 16px;
+    margin: 0;
+  }
+  
+  .user-status {
+    font-size: 12px;
+    color: gray;
+  }
+  
+  .chat-actions button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
+  .chat-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .profile-name {
+    margin: 10px 0 5px 0;
+    font-size: 18px;
+  }
+  
+  .profile-username {
+    color: gray;
+    margin: 0 0 10px 0;
+  }
+  
+  .view-profile-button {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+    cursor: pointer;
+  }
+  
+  .chat-timestamp {
+    text-align: center;
+    margin: 10px 0;
+    color: gray;
+    font-size: 12px;
+  }
+  
+  .chat-message {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    gap:20px;
+  }
+  
+  .message-sender {
+    font-size: 14px;
+    margin-left: 10px;
+  }
+  
+  .chat-footer {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    position: fixed;
+    bottom: 0;
+    width:700px;
+  }
+  
+  .message-input {
+    flex: 1;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    margin: 0 10px;
+  }
+  
+  .emoji-button, .microphone-button, .gallery-button, .heart-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  

@@ -1,25 +1,20 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getUserProfile } from "../Redux/authSlice";
-import { getChatDetails, getMyMessages } from "../Redux/chatSlice";
 
-function Chat({avatar,fullName,chatId}){
+function SearchedUser({avatar,fullName,userId}){
     console.log(avatar,fullName)
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    function getMessagesofChat(){   
-         dispatch(getMyMessages(chatId))
-         dispatch(getChatDetails(chatId))
-        console.log("came here")
-        console.log(chatId)
+    function getUser(){
+        dispatch(getUserProfile(userId)).then(()=>navigate("/userProfile"))
     }
-    
 
 
     return(
         <>
-                <div className="message-list" onClick={getMessagesofChat}>
+                <div className="message-list" onClick={getUser}>
                     <div className="message">
                         <img src={avatar} alt="user" className="user-pic" />
                         <div className="message-info">
@@ -34,5 +29,5 @@ function Chat({avatar,fullName,chatId}){
 }
 
 
-export default Chat;
+export default SearchedUser;
 

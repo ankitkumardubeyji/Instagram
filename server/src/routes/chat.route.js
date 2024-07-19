@@ -9,7 +9,7 @@ const router = Router()
 router.use(verifyJWT)
 
 router.route("/new").post(newGroupChat)
-router.route("/my").get(getMyChats)
+router.route("/my").get(verifyJWT, getMyChats)
 router.route("/addmembers").put(addMembers)
 router.route("/removemembers").put(removeMember)
 router.delete("/leave/:id",leaveGroup)
@@ -19,7 +19,7 @@ router.post("/message",attachmentsMulter, sendAttachments)
 
 
 // get messages
-router.route("/message/:id").get(getMessages);
+router.route("/message/:id").get(verifyJWT,getMessages);
 
 
 router.route("/:id").get(getChatDetails).put(renameGroup).delete(deleteChat)

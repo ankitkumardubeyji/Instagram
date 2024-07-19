@@ -141,7 +141,7 @@ const searchUser = asyncHandler(async (req, res) => {
 
   // Finding all users except me and my friends and filtering by fullName
   const allUsersExceptMeAndFriends = await User.find({
-    _id: { $nin: allUsersFromMyChats },
+    //_id: { $nin: allUsersFromMyChats },
     fullName: { $regex: fullName, $options: "i" },
   });
 
@@ -170,12 +170,9 @@ const searchUser = asyncHandler(async (req, res) => {
     return next(new ApiError(400, "Invalid user ID"));
   }
 
-  const request = await Request.findOne({
-    $or: [
-      { sender: req.user._id, receiver: userId },
-      // { sender: userId, receiver: req.user._id },
-    ],
-  });
+  const request = await Request.findOne(
+      { sender: req.user._id, receiver: userId }, 
+  );
 
   if (request) return next(new ApiError(400, "Request already sent"));
 
@@ -229,7 +226,7 @@ const searchUser = asyncHandler(async (req, res) => {
     await Promise.all([
       Chat.create({
         members,
-        name: `${request.sender.name}-${request.receiver.name}`,
+        name: `${request.sender.fullName}`,
       }),
       request.deleteOne(),
     ]);
@@ -237,8 +234,8 @@ const searchUser = asyncHandler(async (req, res) => {
     emitEvent(req, REFETCH_CHATS, members);
 
     const newfollow = await Follower.create({
-      follower:req.sender?._id,
-      following:request.user?._id  
+      following:request.sender?._id,  // the one who is following 
+      followed:req.user._id   // the one who is being followed 
   })
 
 
@@ -356,7 +353,7 @@ const getUserProfile = asyncHandler(async(req,res)=>{
          $lookup:{
              from:"followers",
              localField:"_id",
-             foreignField:"follower",
+             foreignField:"followed",
              as:"followers"
  
          }
@@ -387,7 +384,7 @@ const getUserProfile = asyncHandler(async(req,res)=>{
              isFollowing:{
                  // checking if any of the documents in the subscribers has the subscriber matching with the current user id , if it is then yes the current user is the subscriber.
                  $cond:{
-                     if:{$in:[req.user?._id,"$followers.follower"]},
+                     if:{$in:[req.user?._id,"$followers.following"]},
                      then:true,
                      else:false,
                  },

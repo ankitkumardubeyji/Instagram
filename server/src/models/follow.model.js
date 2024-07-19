@@ -1,12 +1,12 @@
 import mongoose  from "mongoose";
 
 const followerSchema = mongoose.Schema({
-    follower:{     // the one who is following the artist
+    following:{     // the one who is following 
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"
     },
 
-    following:{ // the one who is being followed by the follower 
+    followed:{ // the one who is being followed 
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"
     }

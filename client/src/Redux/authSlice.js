@@ -9,7 +9,8 @@ const initialState = {
     isLoggedIn:localStorage.getItem("isLoggedIn") || false,
     sUsers:[],
     sUserDetail:JSON.parse(localStorage.getItem("sUserDetail")),
-    requests: JSON.parse(localStorage.getItem("requests")) || []
+    requests: JSON.parse(localStorage.getItem("requests")) || [],
+    chats:JSON.parse(localStorage.getItem("chat")) || []
     
 }
 
@@ -174,6 +175,26 @@ export const getUserProfile = createAsyncThunk("/auth/profile",async(id)=>{
     await res; 
  })
 
+export const getMyChats = createAsyncThunk("auth/mychats",async()=>{
+    const res = axios.get("api/v1/chats/my")
+    let result = []
+
+    toast.promise(res,{
+        loading:"wait getting your chats ",
+        success:(data)=>{
+            console.log(data?.data?.chats)
+            result = data?.data?.chats
+            return data?.data?.message 
+        }
+    })
+
+    await res ; 
+
+    return result 
+})
+
+
+
 
 const authSlice = createSlice(
     {
@@ -209,12 +230,16 @@ const authSlice = createSlice(
                 state.requests = action.payload
                 localStorage.setItem("requests",JSON.stringify(action.payload))
             })
+
+            builder.addCase(getMyChats.fulfilled, (state,action)=>{
+                state.chats = action.payload;
+                localStorage.setItem("chats", JSON.stringify(action.payload))
+            })
         }
     }
 );
 
 
-
-
 export const {} = authSlice.actions
 export default authSlice.reducer;
+
