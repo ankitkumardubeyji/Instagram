@@ -1,6 +1,7 @@
+import cookieParser from "cookie-parser";
 import User from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
-
+import jwt from "jsonwebtoken"
 
 
 
@@ -9,26 +10,42 @@ const socketAuthenticator = async (err, socket, next) => {
   try {
     if (err) return next(err);
 
-    const authToken = socket.request.cookies["chattu-token"];
+    // Check if cookies are already parsed
+    if (!socket.request.cookies) {
+      console.error("Cookies not parsed");
+      return next(new ApiError("Cookies not parsed", 400));
+    }
 
-    if (!authToken)
+    const authToken = socket.request.cookies.accessToken;
+
+    console.log("Cookies:", socket.request.cookies);
+    console.log("Auth Token:", authToken);
+
+    if (!authToken) {
       return next(new ApiError("Please login to access this route", 401));
+    }
 
     const decodedData = jwt.verify(authToken, process.env.JWT_SECRET);
 
-    const user = await User.findById(decodedData._id);
+    console.log("Decoded Data:", decodedData);
 
-    if (!user)
-      return next(new ApiError(401,"Please login to access this route"));
+    const user = await User.findById(decodedData.id);
+    
+    console.log("User:", user);
+
+    if (!user) {
+      return next(new ApiError("Please login to access this route", 401));
+    }
 
     socket.user = user;
 
     return next();
   } catch (error) {
-    console.log(error);
-    return next(new ApiError(400,"Please login to access this route"));
+    console.error("Authentication Error:", error);
+    return next(new ApiError("Please login to access this route", 400));
   }
 };
+
 
 export { socketAuthenticator };
 

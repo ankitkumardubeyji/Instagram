@@ -10,6 +10,7 @@ import { Route,createBrowserRouter,createRoutesFromElements,RouterProvider,Navig
 import Chatting from './pages/Chatting';
 import UserProfile from './pages/UserProfile';
 import Notification from './pages/Notification';
+import { SocketProvider } from './socket';
 
 
 
@@ -30,8 +31,10 @@ function App() {
  
   return (
     <>
-    
-      <RouterProvider router = {router}/>
+        <SocketProvider>
+        <RouterProvider router = {router}/>
+        </SocketProvider>
+     
   
     </>
   )

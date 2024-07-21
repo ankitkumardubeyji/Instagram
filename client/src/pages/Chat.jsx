@@ -6,7 +6,7 @@ import { getChatDetails, getMyMessages } from "../Redux/chatSlice";
 function Chat({avatar,fullName,chatId}){
     console.log(avatar,fullName)
     const dispatch = useDispatch()
-    const navigate = useNavigate()
+   // const navigate = useNavigate()
 
     function getMessagesofChat(){   
          dispatch(getMyMessages(chatId))

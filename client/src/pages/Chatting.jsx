@@ -16,6 +16,9 @@ import SearchedUser from './SearchedUser';
 import { sendMessages } from '../Redux/chatSlice';
 import { GiConsoleController } from 'react-icons/gi';
 import { getMyMessages } from '../Redux/chatSlice';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import SendIcon from '@mui/icons-material/Send';
+import { getSocket } from '../socket';
 
 
 
@@ -24,7 +27,11 @@ function Chatting() {
 
    useEffect(()=>{
     dispatch(getMyChats())
+  
    },[])
+
+   const socket = getSocket()
+   console.log(socket.id)
 
    const [text, setText] = useState({
     content:"ankit",
@@ -38,6 +45,9 @@ function Chatting() {
    const messages = useSelector((state)=> state.chat.messages)
    console.log(messages)
 
+   
+
+   
 
     const navigate = useNavigate()
 
@@ -146,86 +156,96 @@ function Chatting() {
                
             </div>
 
-            <div className="right">
-                {
-                    messageWindow?(
-                        <div className="chat-interface">
-                        <header className="chat-header">
-                          <div className="user-info">
-                            <img src={currentChatDetail.dp} alt="Rajesh Pandey" className="user-avatar" />
-                            <div>
-                              <h2 className="user-name">{currentChatDetail.name}</h2>
-                              <p className="user-status">Active 6 h ago</p>
-                            </div>
-                          </div>
-                          <div className="chat-actions">
-                            <button className="call-button">📞</button>
-                            <button className="video-call-button">🎥</button>
-                            <button className="info-button">ℹ️</button>
-                          </div>
-                        </header>
-                  
-                        <div className="chat-profile">
-                          <img src={currentChatDetail.dp} alt="Rajesh Pandey Profile" className="profile-avatar" />
-                          <h3 className="profile-name">{currentChatDetail.name}</h3>
-                          <p className="profile-username">{currentChatDetail.userName} • Instagram</p>
-                          <button className="view-profile-button">View Profile</button>
-                        </div>
-                  
-                        <div className="chat-timestamp">00:06</div>
-                        
-                        {
-
-                        messages.map((item, index )=>(                        <div className="chat-message" key = {index}>
-                            <div className="message-sender">{item.sender.userName}</div>
-
-                            <h1>{item.content}</h1>
-
-                            <div style={{display:"flex", flexDirection:"column", gap:"10px"}}>
-                            {
-                                item.attachments.map((image , index )=>
-                                    <img src={image.secure_url} alt="Message" width={"100px"}  height="100px" key={index}/>
-                                )
-                            }
-                            </div>
-                          
-                            
-                          </div>))
-
-                  
-                        }
-                        <footer className="chat-footer">
-                          
-                          <form  style={{width:"700px"}} onSubmit={handleSubmit}>
-                          <button className="emoji-button">😊</button>
-                          <input type="text" placeholder="Message..." className="message-input"               value={text.content}
-              onChange={handleUserInput} style={{color:"black"}} name="content"/>
-                   
-                <label htmlFor="file">
-                🖼️
-                </label>
-                <input
-                  type="file"
-                  id="file"
-                 onChange={getImage}
-                  style={{ display: "none" }}
-                  multiple
-                />
-                       <button className="microphone-button" type='submit'>🎤</button>
-                       <button className="heart-button">❤️</button>
-              </form>
-                         
-                        
-                        </footer>
-                      </div>
-                    ):( <div className="message-placeholder">
-                        <h2>Your messages</h2>
-                        <p>Send private photos and messages to a friend or group.</p>
-                        <button>Send message</button>
-                    </div>)
-                }
-               
+            <div className="right" style={{ position: "relative" }}>
+      {messageWindow ? ( // Replace `true` with `messageWindow` to use the actual condition
+        <div className="chat-interface">
+          <header className="chat-header">
+            <div className="user-info">
+              <img src={currentChatDetail.dp} alt="User Avatar" className="user-avatar" />
+              <div>
+                <h2 className="user-name">{currentChatDetail.name}</h2>
+                <p className="user-status">Last Seen {currentChatDetail.status.split("GMT")[0].trim()}</p>
+              </div>
             </div>
+            <div className="chat-actions">
+              <button className="call-button">📞</button>
+              <button className="video-call-button">🎥</button>
+              <button className="info-button">ℹ️</button>
+            </div>
+          </header>
+
+        
+
+       
+
+          <div className="messages-container">
+
+          <div className="chat-profile">
+            <img src={currentChatDetail.dp} alt="Profile Avatar" className="profile-avatar" />
+            <h3 className="profile-name">{currentChatDetail.name}</h3>
+            <p className="profile-username">{currentChatDetail.userName} • Instagram</p>
+            <button className="view-profile-button">View Profile</button>
+          </div>
+
+            {messages.map((item, index) => {
+              const isCurrentUser = item.sender._id.toString() === JSON.parse(localStorage.getItem("data"))._id;
+              const date = new Date(item.createdAt);
+              const localTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+
+              return (
+                <div className={`chat-message ${isCurrentUser ? 'current-user' : ''}`} key={index}>
+                  {!isCurrentUser && (
+                    <img src={item.sender.avatar.secure_url} alt="Sender Avatar" className="user-avatar" />
+                  )}
+                  <div className="message-content">
+                    <h1>{item.content} <span style={{fontSize:"8px"}}>{localTime}</span></h1>
+                    <div className="attachments">
+                      {item.attachments.map((image, index) => (
+                        <img src={image.secure_url} alt="Message Attachment" width="100px" height="100px" key={index} />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <footer className="chat-footer">
+            <form style={{ width: "700px" }} onSubmit={handleSubmit}>
+            
+            <label htmlFor="file"><AttachFileIcon/></label>
+              <input
+                type="file"
+                id="file"
+                onChange={getImage}
+                style={{ display: "none" }}
+                multiple
+              />
+
+              <input
+                type="text"
+                placeholder="Message..."
+                className="message-input"
+                value={text.content}
+                onChange={handleUserInput}
+                style={{ color: "black" , width:"70%"}}
+                name="content"
+              />
+             
+              <button className="microphone-button" type="submit"><SendIcon/></button>
+              <button className="heart-button">❤️</button>
+            </form>
+          </footer>
+        </div>
+      ) : (
+        <div className="message-placeholder">
+          <h2>Your messages</h2>
+          <p>Send private photos and messages to a friend or group.</p>
+          <button>Send message</button>
+        </div>
+      )}
+    </div>
+        
         </div>
     );
 }

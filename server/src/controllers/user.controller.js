@@ -12,6 +12,8 @@ import { REFETCH_CHATS, NEW_REQUEST  } from "../constants/event.js";
 import { getOtherMember } from "../lib/helper.js";
 import { Follower } from "../models/follow.model.js";
 
+let currentUser = {}
+
 const registerUser = asyncHandler(async(req,res)=>{
     const {fullName, email,userName, password,phoneNo} = req.body;
 
@@ -102,6 +104,8 @@ const loginUser = asyncHandler(async(req,res)=>{
     }
 
     const accessToken = await user.generateJWTToken(user._id)
+
+    currentUser = user;
 
     return res.status(200)
     .cookie("accessToken",accessToken)
@@ -423,5 +427,8 @@ const getUserProfile = asyncHandler(async(req,res)=>{
 
 
 
-export {registerUser,loginUser,logOut,searchUser,sendFriendRequest,getMyNotifications,acceptFriendRequest,getMyFriends,getUserProfile};
+
+
+
+export {registerUser,loginUser,logOut,searchUser,sendFriendRequest,getMyNotifications,acceptFriendRequest,getMyFriends,getUserProfile,currentUser};
 

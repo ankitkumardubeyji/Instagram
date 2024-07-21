@@ -265,17 +265,18 @@ const getMyChats = asyncHandler(async (req, res, next) => {
   const getChatDetails = asyncHandler(async (req, res, next) => {
     if (req.query.populate === "true") {
       let chat = await Chat.findById(req.params.id)
-        .populate("members", "fullName avatar userName")
+        .populate("members", "fullName avatar userName status")
         .lean();
   
       if (!chat) return next(new ApiError(404,"Chat not found"));
   
      // console.log(chat)
-      chat.members = chat.members.map(({ _id, fullName, avatar, userName }) => ({
+      chat.members = chat.members.map(({ _id, fullName, avatar, userName, status }) => ({
         _id,
         fullName,
         userName,
         avatar: avatar.secure_url,
+        status
       }));
 
       console.log("came here ")
@@ -288,7 +289,7 @@ const getMyChats = asyncHandler(async (req, res, next) => {
         }
       }
 
-      chat = {...chat, dp:chat.members[index].avatar, userName:chat.members[index].userName}
+      chat = {...chat, dp:chat.members[index].avatar, userName:chat.members[index].userName, status:chat.members[index].status}
       chat.name = chat.members[index].fullName
 
   
