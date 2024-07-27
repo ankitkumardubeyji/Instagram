@@ -16,6 +16,7 @@ import { getSockets } from "./lib/helper.js";
 import { Message } from "./models/message.model.js";
 import { corsOptions } from "./constants/config.js";
 import { socketAuthenticator } from "./middlewares/auth.js";
+import { v4 as uuid } from "uuid";
 
 let userSocketIds = new Map(); // contains all the user that are active with their corresponding socket id
 const app = express();
@@ -50,6 +51,7 @@ io.on("connection", async(socket) => {
   console.log(user)
 
   socket.on(NEW_MESSAGE, async ({ chatId, members, message }) => {
+    console.log(chatId+" "+members+" "+message)
     const messageForRealTime = {
       content: message,
       _id: uuid(),
@@ -77,7 +79,8 @@ io.on("connection", async(socket) => {
     io.to(membersSocket).emit(NEW_MESSAGE_ALERT, { chatId }); // this is for the alert of the new messages
 
     try {
-      await Message.create(messageForDB);
+     const NayaMessage =  await Message.create(messageForDB);
+     console.log(NayaMessage)
     } catch (error) {
       throw new Error(error);
     }
@@ -88,8 +91,9 @@ io.on("connection", async(socket) => {
     console.log(members)
     console.log(chatId+" is the id")
     const membersSockets = getSockets(members);
+    console.log(userSocketIds)
     console.log(membersSockets)
-    socket.to(membersSockets).emit(START_TYPING, { chatId });
+    socket.to(membersSockets)?.emit(START_TYPING, { chatId });
   });
 
   socket.on(STOP_TYPING, ({ members, chatId }) => {
@@ -122,7 +126,14 @@ io.on("connection", async(socket) => {
   });
 });
 
+import postRouter from "./routes/post.route.js"
+import commentRouter from "./routes/comment.route.js"
+
+
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/chats", chatRouter);
+app.use("/api/v1/posts",postRouter)
+app.use("/api/v1/comments",commentRouter)
+
 
 export { server, userSocketIds };

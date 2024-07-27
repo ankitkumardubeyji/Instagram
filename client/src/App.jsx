@@ -1,43 +1,41 @@
+import React from 'react';
+import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider, Navigate } from 'react-router-dom';
 
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Home from "./pages/Home"
-
-
-
-import { Route,createBrowserRouter,createRoutesFromElements,RouterProvider,Navigate } from 'react-router-dom'
-
+import Home from './pages/Home';
 import Chatting from './pages/Chatting';
 import UserProfile from './pages/UserProfile';
 import Notification from './pages/Notification';
 import { SocketProvider } from './socket';
 
+const RequireAuth = ({ children }) => {
+  const data = JSON.parse(localStorage.getItem("data"));
+  if (!data || Object.keys(data).length === 0) {
+    return <Navigate to="/login" />;
+  }
+  return children;
+};
 
-
-function App() {
+const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <> {/* at the top level of nesting giving the layout hence the below oulets are able to come automatically */}
-        <Route path='' element={<Home />} />
-        <Route path='login' element={<Login />} />
-        <Route path='register' element={<Register />} /> {/* when comes the /about Abou component passed as outlet */} 
-        <Route path='chatting' element={<Chatting />} /> {/* when comes the /about Abou component passed as outlet */} 
-         <Route path='userProfile' element={<UserProfile/>}/>    
-         <Route path='notifications' element={<Notification/>}/>    
-        
+      <>
+        <Route path="/" element={<RequireAuth><Home /></RequireAuth>} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
+        <Route path="chatting" element={<RequireAuth><Chatting /></RequireAuth>} />
+        <Route path="userProfile" element={<RequireAuth><UserProfile /></RequireAuth>} />
+        <Route path="notifications" element={<RequireAuth><Notification /></RequireAuth>} />
       </>
     )
-  )
- 
-  return (
-    <>
-        <SocketProvider>
-        <RouterProvider router = {router}/>
-        </SocketProvider>
-     
-  
-    </>
-  )
-}
+  );
 
-export default App
+  return (
+    <SocketProvider>
+      <RouterProvider router={router} />
+    </SocketProvider>
+  );
+};
+
+export default App;

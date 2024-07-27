@@ -7,7 +7,8 @@ import axios from "axios";
 const initialState = {
     messageWindow:false,
     messages:[], 
-    currentChatDetail:  {}
+    currentChatDetail:  {},
+    currentChatInfo:{}
 }
 
 
@@ -48,6 +49,23 @@ export const getChatDetails = createAsyncThunk("chat/getDetails", async(chatId)=
 
 })
 
+export const getChatInfo = createAsyncThunk("chat/info", async(chatId)=>{
+    let result = {}
+    const res = axios.get(`api/v1/chats/${chatId}?populate=false`)
+
+    toast.promise(res,{
+        loading:"wait getting the chat details",
+        success:(data)=>{
+            result = data?.data?.chat 
+            return data?.data?.message 
+        }
+    })
+
+    await res;
+
+    return result;
+})
+
 export const sendMessages = createAsyncThunk("chat/send", async(data)=>{
     const res = axios.post("api/v1/chats/message",data)
 
@@ -81,6 +99,10 @@ const chatSlice = createSlice(
                console.log(action.payload) 
                 }
              )
+
+           builder.addCase(getChatInfo.fulfilled,(state,action)=>{
+            state.currentChatInfo = action.payload
+           })  
         }
     }
 );

@@ -94,7 +94,7 @@ const loginUser = asyncHandler(async(req,res)=>{
 
     if(!user){
     
-        throw new ApiError(400,"user with the given email id doesnt exists");
+        throw new ApiError(400,"User with the given email id doesnt exists");
     }
 
     const isPasswordCorrect = await user.isPasswordCorrect(password)

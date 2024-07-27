@@ -4,8 +4,19 @@ import axios from "axios";
 
 
 
+
+let data;
+try {
+    const dataString = localStorage.getItem("data");
+    data = dataString ? JSON.parse(dataString) : {};
+} catch (error) {
+    console.error("Error parsing data from localStorage:", error);
+    data = {};
+}
+
+
 const initialState = {
-    data:JSON.parse(localStorage.getItem("data")) || {},
+    data:data,
     isLoggedIn:localStorage.getItem("isLoggedIn") || false,
     sUsers:[],
     sUserDetail:JSON.parse(localStorage.getItem("sUserDetail")),
@@ -25,14 +36,19 @@ export const createAccount = createAsyncThunk("/auth/create",async(data)=>{
           
                 result = data?.data?.data?.user 
                 return data?.data?.message
-            }
+            },
+
+            error:"Please give valid inputs"
+          
         })
 
         await res;
         return result 
     }
-    catch(err){
-        toast.error(err?.response?.data?.message)
+    catch(error){
+        console.log(error)
+        //toast.error(error?.response?.data?.message)
+        throw error;
     }
 })
 
@@ -48,17 +64,20 @@ export const validateAccount = createAsyncThunk("auth/validate",async(data)=>{
          success:(data)=>{
             result = data?.data?.data?.user
              return data?.data?.message 
-         }
+         },
+         error:"Invalid credentials"
          
      })
  
      await res; 
      return result
    } catch (error) {
-    console.log(error?.response?.data?.message)
-    toast.error(error?.response)
+    console.log(error)
+   // toast.error(error?.response?.data?.message)
+   throw error;
    }
 })
+
 
 
 export const searchUser = createAsyncThunk("auth/search", async(data)=>{
@@ -192,6 +211,9 @@ export const getMyChats = createAsyncThunk("auth/mychats",async()=>{
 
     return result 
 })
+
+
+
 
 
 

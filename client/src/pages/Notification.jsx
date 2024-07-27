@@ -33,8 +33,6 @@ function Notification(){
         setReject(true);
     }
 
-
-
   
 
     return(

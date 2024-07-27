@@ -1,8 +1,10 @@
 import { useState } from "react";
 import {useDispatch} from "react-redux"
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { createAccount } from "../Redux/authSlice";
+import "./Login.css"
+
 
 function Register(){
 
@@ -85,7 +87,8 @@ if (registerData.fullName.length < 5) {
 }
 
     return(
-        <div className="right">
+      <div className="container">
+        <div className="loginRight">
         <div className="card">
           <img src="insta.png" alt="Instagram Logo" className="logo" />
           <form onSubmit={handleRegister}>
@@ -141,21 +144,21 @@ if (registerData.fullName.length < 5) {
 
 
             <button type="submit" className="login-btn">
-              Log in
+              Register
             </button>
           </form>
-          <div className="separator">OR</div>
-          <button className="facebook-login-btn">Log in with Facebook</button>
+         
           <a href="#" className="forgot-password">
             Forgotten your password?
           </a>
         </div>
         <div className="signup">
           <span>
-            Don't have an account? <a href="#">Sign up</a>
+            Already have an account? <Link to="/login">Sign In</Link>
           </span>
         </div>
         
+        </div>
         </div>
     )
 }

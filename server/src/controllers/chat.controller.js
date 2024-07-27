@@ -300,10 +300,7 @@ const getMyChats = asyncHandler(async (req, res, next) => {
     } else {
       const chat = await Chat.findById(req.params.id);
       console.log("came here ")
-      console.log(members[1].avatar)
-
-      chat = {...chat, dp:members[1].avatar}
-
+      
       if (!chat) return next(new ApiError(404,"Chat not found"));
   
       return res.status(200).json({

@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getUserProfile } from "../Redux/authSlice";
-import { getChatDetails, getMyMessages } from "../Redux/chatSlice";
+import { getChatDetails, getChatInfo, getMyMessages } from "../Redux/chatSlice";
 
 function Chat({avatar,fullName,chatId}){
     console.log(avatar,fullName)
@@ -11,6 +11,7 @@ function Chat({avatar,fullName,chatId}){
     function getMessagesofChat(){   
          dispatch(getMyMessages(chatId))
          dispatch(getChatDetails(chatId))
+         dispatch(getChatInfo(chatId))
         console.log("came here")
         console.log(chatId)
     }

@@ -19,7 +19,10 @@ import { getMyMessages } from '../Redux/chatSlice';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import SendIcon from '@mui/icons-material/Send';
 import { getSocket } from '../socket';
-
+import { NEW_MESSAGE , START_TYPING, STOP_TYPING} from '../../../server/src/constants/event';
+import { useSocketEvents } from '../hooks/hook';
+import { useCallback } from 'react';
+import { useRef } from 'react';
 
 
 
@@ -27,6 +30,10 @@ function Chatting() {
 
    useEffect(()=>{
     dispatch(getMyChats())
+
+    socket.on("START_TYPING",(data)=>{
+      console.log("CAME HERE")
+    })
   
    },[])
 
@@ -34,7 +41,7 @@ function Chatting() {
    console.log(socket.id)
 
    const [text, setText] = useState({
-    content:"ankit",
+    content:"",
     files:[],
     chatId:""
    })
@@ -54,6 +61,10 @@ function Chatting() {
     const [sUsers,setSusers] = useState([])
 
     const dispatch = useDispatch()
+
+    const [IamTyping, setIamTyping] = useState(false);
+    const [userTyping, setUserTyping] = useState(false);
+    const typingTimeout = useRef(null);
 
     
     function handleSearch(e){
@@ -78,6 +89,18 @@ function Chatting() {
           ...text,
           [name]:value 
       })
+
+      if (!IamTyping) {
+        socket.emit(START_TYPING, {chatId:currentInfo._id, members:currentInfo.members });
+        setIamTyping(true);
+      }
+  
+      if (typingTimeout.current) clearTimeout(typingTimeout.current);
+  
+      typingTimeout.current = setTimeout(() => {
+        socket.emit(STOP_TYPING, { chatId:currentInfo._id, members:currentInfo.members });
+        setIamTyping(false);
+      }, [2000]);
   }
   
     const getImage = (e) => {
@@ -94,11 +117,35 @@ function Chatting() {
       }
   
       console.log(text);
+
+      const formData = new FormData();
+      formData.append("content", text.content);
+  
+      text.files.forEach(file => {
+        formData.append("files", file);
+      });
+  
+      formData.append("chatId", currentChatDetail._id);
+
+      dispatch(sendMessages(formData)).then(()=>  dispatch(getMyMessages(currentChatDetail._id)))
+
     };
   
+    const currentInfo = useSelector((state)=>state.chat.currentChatInfo)
+
     const handleSubmit = (e) => {
       e.preventDefault();
+
+      if(!text.content.trim() == ''){
+          socket.emit(NEW_MESSAGE, { chatId:currentInfo._id, members:currentInfo.members, message:text.content});
+          dispatch(getMyMessages(currentChatDetail._id))
+          setText({content:"",
+            files:[],
+            chatId:""})
+      }
+      
   
+      /*
       const formData = new FormData();
       formData.append("content", text.content);
   
@@ -112,9 +159,37 @@ function Chatting() {
   
       // Send formData to the server using fetch or axios
       // Example with fetch:
+
+      */
+
       
     };
 
+    const startTypingListener = useCallback(
+      (data) => {
+        if (data.chatId !== currentInfo._id) return;
+  
+        setUserTyping(true);
+      },
+      [currentInfo._id]
+    );
+  
+    const stopTypingListener = useCallback(
+      (data) => {
+        if (data.chatId !== currentInfo.id) return;
+        setUserTyping(false);
+      },
+      [currentInfo._id]
+    );
+
+    const eventHandler = {
+ 
+      [START_TYPING]: startTypingListener,
+      [STOP_TYPING]: stopTypingListener,
+    };
+  
+    useSocketEvents(socket, eventHandler);
+  
 
 
 
@@ -211,8 +286,8 @@ function Chatting() {
           </div>
 
           <footer className="chat-footer">
-            <form style={{ width: "700px" }} onSubmit={handleSubmit}>
-            
+           
+            <div style={{ width: "700px", display:"flex" }}>
             <label htmlFor="file"><AttachFileIcon/></label>
               <input
                 type="file"
@@ -222,7 +297,10 @@ function Chatting() {
                 multiple
               />
 
+               <form  onSubmit={handleSubmit}>
+
               <input
+               ref={typingTimeout}
                 type="text"
                 placeholder="Message..."
                 className="message-input"
@@ -235,6 +313,7 @@ function Chatting() {
               <button className="microphone-button" type="submit"><SendIcon/></button>
               <button className="heart-button">❤️</button>
             </form>
+            </div>
           </footer>
         </div>
       ) : (

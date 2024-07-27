@@ -1,6 +1,6 @@
 import { useState , useEffect } from "react";
 import "./Login.css";
-import { useNavigate} from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { validateAccount } from "../Redux/authSlice";
 import toast from "react-hot-toast";
@@ -65,7 +65,7 @@ function Login() {
 
   return (
     <div className="container">
-      <div className="left">
+      <div className="loginLeft">
         <div className="mobile">
           <img src="/bg.png" alt="Background" />
           <div className="mobileTop">
@@ -74,7 +74,7 @@ function Login() {
         </div>
        
       </div>
-      <div className="right">
+      <div className="loginRight">
         <div className="card">
           <img src="insta.png" alt="Instagram Logo" className="logo" />
           <form onSubmit={handleLogin}>
@@ -101,7 +101,7 @@ function Login() {
         </div>
         <div className="signup">
           <span>
-            Don't have an account? <a href="#">Sign up</a>
+            Don't have an account? <Link to="/register">Sign up</Link>
           </span>
         </div>
        
