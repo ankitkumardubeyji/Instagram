@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://instagram-cw04.onrender.com/api/$1"
+    }
+ ]
+}
